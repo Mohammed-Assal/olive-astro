@@ -1,0 +1,149 @@
+---
+// src/pages/privacy-policy.astro
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import '../../styles/global.css';
+
+// SEO Variables
+const title = "Privacy Policy | Olive Extra – Moroccan Olive Oil";
+const description = "Read Olive Extra's Privacy Policy to learn how we collect, protect, and manage your data in compliance with international privacy standards. We prioritize your security and privacy.";
+const keywords = "privacy policy, data protection, Olive Extra privacy, Moroccan olive oil, user data security, GDPR compliance, Olive Extra";
+const siteUrl = "https://www.oliveextra.com/privacy-policy";
+const imageUrl = "https://www.oliveextra.com/oliveextra-logo.webp";
+const lastUpdated = "December 29, 2025";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    {/* Basic SEO */}
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="Olive Extra Team" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={siteUrl} />
+
+    {/* OpenGraph */}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:site_name" content="Olive Extra" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Olive Extra Privacy Policy" />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:creator" content="@OliveExtra" />
+
+    {/* Favicon */}
+    <link rel="icon" type="image/webp" href="/olive-extra-logo.webp" />
+  </head>
+  
+  <body class="bg-white min-h-screen flex flex-col">
+    <Header />
+    
+    <main class="flex-grow pt-32 pb-20">
+      <div class="container mx-auto px-6 max-w-4xl">
+        
+        {/* Header */}
+        <div class="border-b border-gray-100 pb-10 mb-10 mt-10">
+          <h1 class="text-4xl md:text-5xl font-bold text-[#1B1B1B] mb-4 font-serif">
+            Privacy Policy
+          </h1>
+          <p class="text-[#4A512E] font-medium">
+            Last Updated: {lastUpdated}
+          </p>
+        </div>
+
+        {/* Content */}
+        {/* Mola7ada: Khass ykoun 3ndk package '@tailwindcss/typography' f tailwind.config bach tkhdm lik 'prose' mzyan */}
+        <div class="prose prose-slate max-w-none prose-headings:text-[#1B1B1B] prose-headings:font-serif prose-p:text-[#4A512E] prose-li:text-[#4A512E]">
+          <p class="lead text-lg">
+            At Olive Extra, we respect your privacy and are committed to
+            protecting the personal data you share with us. This policy
+            explains how we handle your information when you visit our store
+            or engage in our export services.
+          </p>
+
+          <section>
+            <h2 class="text-2xl font-bold mt-8">
+              1. Information We Collect
+            </h2>
+            <p>
+              We collect information that helps us provide a better
+              experience, including:
+            </p>
+            <ul>
+              <li>
+                <strong>Personal Identifiers:</strong> Name, email address,
+                and phone number when you request a quote.
+              </li>
+              <li>
+                <strong>Transactional Data:</strong> Shipping address and
+                order history for olive oil purchases.
+              </li>
+              <li>
+                <strong>Technical Data:</strong> IP address, browser type, and
+                usage patterns through cookies.
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 class="text-2xl font-bold mt-8">
+              2. How We Use Your Data
+            </h2>
+            <p>Your data is used strictly for:</p>
+            <ul>
+              <li>Processing and shipping your olive oil orders.</li>
+              <li>
+                Providing custom wholesale quotes for international export.
+              </li>
+              <li>
+                Sending periodic updates or newsletters (only if you opt-in).
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 class="text-2xl font-bold mt-8">3. Data Protection</h2>
+            <p>
+              We implement industry-standard security measures, including SSL
+              encryption, to ensure your sensitive data (like payment info) is
+              transmitted securely. We never sell your personal information to
+              third parties.
+            </p>
+          </section>
+
+          <section class="bg-[#F7F5EF] p-8 rounded-2xl mt-12 border border-[#B68A45]/20">
+            <h2 class="text-xl font-bold mb-4">
+              Contact Our Data Officer
+            </h2>
+            <p class="mb-0">
+              If you have questions about this policy or wish to request data
+              deletion, please contact us at:
+              <br />
+              <strong>Email:</strong> helo.olive.extra@gmail.com
+              <br />
+              <strong>Address:</strong> El Kelaa des Sraghna, Marrakesh-Safi,
+              Morocco
+            </p>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

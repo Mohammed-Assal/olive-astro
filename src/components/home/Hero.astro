@@ -1,0 +1,97 @@
+---
+// Hero.astro - Mafihch JS f Serveur 7it kolchi static
+---
+
+<section id="home" class="relative min-h-screen flex items-center overflow-hidden bg-[#FCFBF8]">
+  
+    <div class="absolute inset-0 z-0">
+      <div class="block lg:hidden h-full w-full relative">
+        <img
+          src="/hero-phone.webp"
+          alt="Moroccan Olive Export Mobile"
+          class="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div class="absolute inset-0 bg-gradient-to-b from-[#FCFBF8] via-[#FCFBF8]/40 to-transparent z-10"></div>
+      </div>
+  
+      <div class="hidden lg:block h-full w-full relative">
+        <img
+          src="/hero-oliveextra.webp"
+          alt="Premium Moroccan Olive Oil Export"
+          class="absolute inset-0 w-full h-full object-cover object-right lg:object-center"
+        />
+        <div class="absolute inset-0 bg-gradient-to-r from-[#FCFBF8] via-[#FCFBF8]/30 to-transparent z-10"></div>
+      </div>
+    </div>
+  
+    <div class="container mx-auto px-6 relative z-20">
+      <div class="max-w-[850px] drop-shadow-[0_2px_10px_rgba(252,251,248,0.8)]">
+        
+        <div class="inline-flex items-center space-x-3 bg-white/60 backdrop-blur-md px-4 py-2 rounded-full border border-[#414A22]/20 mb-8 animate-in fade-in duration-1000">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#414A22]"><path d="M11 20A7 7 0 0 1 14 6c5.5 0 8 2.5 8 2.5s-2.5 8-8 8a7 7 0 0 1-3 10Z"/><path d="m2 22 9-9"/></svg>
+          <span class="text-[#414A22] text-[9px] font-black uppercase tracking-[0.3em]">
+            Heritage Harvest 2026
+          </span>
+        </div>
+  
+        <div class="space-y-1 mb-8 mt-4 lg:mt-9 animate-in slide-in-from-left-10 duration-1000">
+          <h1 class="text-[#111] font-serif leading-[1.1] tracking-tight">
+            <span class="text-[2.5rem] md:text-[4rem] block drop-shadow-sm">
+              Moroccan Essence,
+            </span>
+            <span class="text-[3rem] md:text-[5.5rem] italic font-light text-[#BD9343] block drop-shadow-sm">
+              Global Excellence.
+            </span>
+          </h1>
+          <p class="text-[#111]/80 text-lg md:text-xl font-medium max-w-lg leading-relaxed lg:bg-white/10 lg:backdrop-blur-[2px] lg:rounded-lg">
+            Pure extra virgin olive oil, cold-pressed from our ancestral groves to the world’s table.
+          </p>
+        </div>
+  
+        <div class="flex flex-col sm:flex-row gap-4 mb-16 animate-in fade-in slide-in-from-bottom-5 duration-1000 delay-300">
+          <a 
+            href="/contact" 
+            class="group relative px-10 py-6 bg-[#414A22] text-white rounded-full overflow-hidden transition-all duration-500 shadow-2xl shadow-[#414A22]/40 flex items-center justify-center gap-3"
+          >
+            <div class="absolute inset-0 bg-[#BD9343] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+            <span class="relative z-10 text-[10px] font-black uppercase tracking-widest">Inquire Now</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="relative z-10 group-hover:translate-x-2 transition-transform duration-500"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          
+          <a 
+            href="/about-us" 
+            class="px-10 py-6 bg-white border border-[#414A22]/20 text-[#414A22] rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-[#414A22] hover:text-white transition-all duration-500 flex items-center justify-center shadow-lg"
+          >
+            Our Story
+          </a>
+        </div>
+  
+        <div class="grid grid-cols-3 gap-4 lg:gap-12 p-6 lg:p-0 bg-white/40 backdrop-blur-md lg:bg-transparent rounded-[2rem] border border-white/20 lg:border-none lg:border-t lg:border-[#414A22]/10 max-w-sm lg:max-w-md animate-in fade-in duration-1000 delay-500">
+          <div class="space-y-1">
+            <span class="text-[#111] text-xl lg:text-3xl font-bold tracking-tighter">25+</span>
+            <p class="text-[8px] lg:text-[9px] font-black uppercase tracking-widest text-[#BD9343]">Markets</p>
+          </div>
+          <div class="space-y-1">
+            <span class="text-[#111] text-xl lg:text-3xl font-bold tracking-tighter">100%</span>
+            <p class="text-[8px] lg:text-[9px] font-black uppercase tracking-widest text-[#BD9343]">Organic</p>
+          </div>
+          <div class="space-y-1">
+            <span class="text-[#111] text-xl lg:text-3xl font-bold tracking-tighter">15Y+</span>
+            <p class="text-[8px] lg:text-[9px] font-black uppercase tracking-widest text-[#BD9343]">Legacy</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="absolute bottom-12 right-12 hidden lg:block z-20">
+      <div class="bg-white/80 backdrop-blur-md px-6 py-4 rounded-3xl border border-[#414A22]/5 flex items-center gap-4 shadow-2xl">
+        <div class="bg-[#414A22] p-3 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#BD9343]"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+        </div>
+        <div>
+          <p class="text-[#111] font-bold text-sm">ISO Certified</p>
+          <p class="text-[#414A22]/60 text-[9px] font-black uppercase tracking-widest">Global Export Grade</p>
+        </div>
+      </div>
+    </div>
+  </section>

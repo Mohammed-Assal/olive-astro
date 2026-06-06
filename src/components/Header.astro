@@ -1,85 +1,197 @@
 ---
-import { SITE_TITLE } from '../consts';
-import HeaderLink from './HeaderLink.astro';
+// Hna kaykoun JavaScript li kayt-exécuta f Serveur (mafihch hook b7al useState)
+const navLinks = [
+  { name: "Home", href: "/" },
+  { name: "About Us", href: "/about-us" },
+  { name: "Products", href: "/product" },
+  { name: "Blog", href: "/blog" },
+  { name: "Contact", href: "/contact" },
+]; 
+import '../styles/global.css' 
+// L'cart static l'had l'wa9t (ghadi nbdlouh mn b3d b Nano Stores)
+const cartItems = [
+  { id: 1, title: "Premium Olive Oil", price: 45, quantity: 2, image: "/olive-extra-logo.webp" } // Bdal l'image l chi 7aja 3ndk
+];
+const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 ---
 
-<header>
-	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
-		</div>
-		<div class="social-links">
-			<a href="https://m.webtoo.ls/@astro" target="_blank">
-				<span class="sr-only">Follow Astro on Mastodon</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"
-					></path></svg
-				>
-			</a>
-			<a href="https://twitter.com/astrodotbuild" target="_blank">
-				<span class="sr-only">Follow Astro on Twitter</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
-					></path></svg
-				>
-			</a>
-			<a href="https://github.com/withastro/astro" target="_blank">
-				<span class="sr-only">Go to Astro's GitHub repo</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
-					></path></svg
-				>
-			</a>
-		</div>
-	</nav>
-</header>
-<style>
-	header {
-		margin: 0;
-		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
+<!-- HTML BDA HNA -->
+<header
+  id="main-header"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-white/95 backdrop-blur-md py-3 shadow-sm"
+>
+  <nav class="container mx-auto px-6">
+    <div class="flex items-center justify-between">
+      
+      {/* 1. LOGO */}
+      <a href="/" class="relative z-50" aria-label="Olive Extra Homepage">
+        <img
+          src="../../public/olive-extra-logo.webp"
+          alt="Olive Extra Logo"
+          width="140"
+          height="50"
+          class="h-auto w-[120px] lg:w-[140px] transition-transform duration-300 hover:scale-105"
+        />
+      </a>
 
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-	}
-	nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
-		text-decoration: none;
-	}
-	nav a.active {
-		text-decoration: none;
-		border-bottom-color: var(--accent);
-	}
-	.social-links,
-	.social-links a {
-		display: flex;
-	}
-	@media (max-width: 720px) {
-		.social-links {
-			display: none;
-		}
-	}
-</style>
+      {/* 2. DESKTOP NAV */}
+      <div class="hidden md:flex items-center space-x-10">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#414A22] hover:text-[#8A6A27] transition-colors duration-300"
+          >
+            {link.name}
+          </a>
+        ))}
+      </div>
+
+      {/* 3. ACTIONS */}
+      <div class="flex items-center gap-6">
+        <div class="relative">
+          <button
+            id="cart-btn"
+            class="group relative p-2 rounded-full text-white bg-[#414A22] hover:bg-[#2A3015] transition-all duration-300"
+            aria-label={`Open Cart`}
+          >
+            {/* ShoppingCart SVG Icon */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+            
+            {totalItems > 0 && (
+              <span class="absolute top-0 right-0 bg-[#BD9343] text-[#2A3015] text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-full shadow-sm">
+                {totalItems}
+              </span>
+            )}
+          </button>
+
+          {/* Cart Dropdown (Mkhbi f l'bdya) */}
+          <div id="cart-dropdown" class="hidden">
+            <div id="cart-overlay" class="fixed inset-0 z-[-1]"></div>
+            <div class="absolute right-0 mt-6 w-80 bg-white rounded-[2rem] shadow-2xl border border-[#414A22]/10 z-50 overflow-hidden">
+              <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                <span class="text-[10px] font-black uppercase tracking-widest text-[#414A22]">
+                  Your Selection
+                </span>
+                <span class="text-[10px] text-[#8A6A27] font-bold">
+                  {totalItems} Items
+                </span>
+              </div>
+              <div class="max-h-[350px] overflow-y-auto px-2">
+                {cartItems.length === 0 ? (
+                  <div class="py-12 text-center">
+                    <p class="text-[11px] uppercase tracking-widest text-gray-600 font-bold">
+                      Cart is empty
+                    </p>
+                  </div>
+                ) : (
+                  cartItems.map((item) => (
+                    <div class="flex gap-4 p-4 hover:bg-[#FCFBF8] rounded-[1.5rem] transition-colors group">
+                      <div class="relative w-16 h-16 rounded-xl overflow-hidden border border-gray-200 flex-shrink-0 bg-gray-100">
+                        <img src={item.image} alt={item.title} class="w-full h-full object-cover" />
+                      </div>
+                      <div class="flex-1">
+                        <p class="text-xs font-bold text-[#414A22] line-clamp-1">{item.title}</p>
+                        <p class="text-[10px] text-gray-600 mt-1 font-bold">
+                          {item.quantity}L × <span class="text-[#8A6A27]">${item.price}</span>
+                        </p>
+                      </div>
+                      <button class="self-center p-2 opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-600 transition-all">
+                        {/* Trash SVG Icon */}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+              {cartItems.length > 0 && (
+                <div class="p-6 bg-[#FCFBF8] border-t border-gray-100">
+                  <a href="/cart" class="flex items-center justify-center gap-3 w-full bg-[#414A22] text-white py-4 rounded-full text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#2A3015] transition-all shadow-lg active:scale-95">
+                    Checkout Now 
+                    {/* ArrowRight SVG Icon */}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-[#414A22] hover:text-[#2A3015] transition-colors" aria-label="Open mobile menu">
+          {/* Menu SVG Icon */}
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+{/* 4. MOBILE NAVIGATION */}
+<div id="mobile-menu" class="hidden fixed inset-0 bg-white z-[100] flex-col md:hidden">
+  <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+    <p class="text-[10px] font-black uppercase tracking-[0.3em] text-[#8A6A27]">Menu</p>
+    <button id="close-menu-btn" class="p-2" aria-label="Close mobile menu">
+      {/* X SVG Icon */}
+      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#414A22]"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+
+  <div class="flex-1 px-8 py-12 flex flex-col space-y-8 overflow-y-auto">
+    {navLinks.map((link) => (
+      <a href={link.href} class="mobile-link text-3xl font-serif italic text-[#414A22] flex justify-between items-center group border-b border-gray-100 pb-4 hover:text-[#8A6A27] transition-colors">
+        {link.name}
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#8A6A27] opacity-50 group-hover:opacity-100 transition-all"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    ))}
+  </div>
+
+  <div class="p-8 bg-[#FCFBF8]">
+    <p class="text-[10px] font-black uppercase tracking-[0.3em] text-[#8A6A27] mb-2">OliveExtra Export</p>
+    <p class="text-xs text-[#414A22]/80 font-medium">Moroccan Essence, Global Excellence</p>
+  </div>
+</div>
+
+<!-- JAVASCRIPT BDA HNA (kay3wd useState w useEffect) -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Scroll Effect l'Header
+    const header = document.getElementById('main-header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        header?.classList.remove('bg-white/95', 'backdrop-blur-md', 'py-3', 'shadow-sm');
+        header?.classList.add('bg-white', 'shadow-md', 'py-2');
+      } else {
+        header?.classList.add('bg-white/95', 'backdrop-blur-md', 'py-3', 'shadow-sm');
+        header?.classList.remove('bg-white', 'shadow-md', 'py-2');
+      }
+    });
+
+    // 2. Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+
+    const toggleMenu = () => {
+      mobileMenu?.classList.toggle('hidden');
+      mobileMenu?.classList.toggle('flex');
+      document.body.style.overflow = mobileMenu?.classList.contains('flex') ? 'hidden' : 'unset';
+    };
+
+    mobileMenuBtn?.addEventListener('click', toggleMenu);
+    closeMenuBtn?.addEventListener('click', toggleMenu);
+    mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+    // 3. Cart Toggle
+    const cartBtn = document.getElementById('cart-btn');
+    const cartDropdown = document.getElementById('cart-dropdown');
+    const cartOverlay = document.getElementById('cart-overlay');
+
+    const toggleCart = () => {
+      cartDropdown?.classList.toggle('hidden');
+    };
+
+    cartBtn?.addEventListener('click', toggleCart);
+    cartOverlay?.addEventListener('click', toggleCart);
+  });
+</script>

@@ -1,0 +1,6 @@
+# robots.txt for https://oliveextra.com
+
+User-agent: *
+Allow: /
+
+Sitemap: https://oliveextra.com/sitemap.xml

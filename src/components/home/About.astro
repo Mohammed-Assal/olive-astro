@@ -1,0 +1,141 @@
+---
+// About.astro
+const highlights = [
+  { label: "Global Markets", value: "25+" },
+  { label: "Distributor Partners", value: "500+" },
+  { label: "Export Capacity", value: "5,000T" },
+  { label: "Years of Legacy", value: "15+" },
+];
+---
+
+<section id="about" class="pb-32 bg-[#FCFBF8] relative overflow-hidden">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <div class="flex flex-col lg:flex-row gap-20 items-center">
+      
+      {/* 1. LEFT - The Editorial Collage */}
+      <div class="w-full lg:w-1/2 relative">
+        {/* Soft backdrop glow */}
+        <div
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#414A22]/5 rounded-full blur-[100px] -z-10"
+          aria-hidden="true"
+        ></div>
+
+        <div class="relative h-[600px] w-full">
+          {/* Main Large Image (Olive Grove) */}
+          <div class="absolute top-0 right-0 w-[80%] h-[75%] rounded-[3rem] overflow-hidden shadow-2xl shadow-[#414A22]/10 border-4 border-white z-10 hover:scale-[1.02] transition-transform duration-700">
+            <img
+              src="/olive-blad.webp"
+              alt="Ancestral Moroccan Olive Grove"
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <div
+              class="absolute inset-0 bg-[#414A22]/10 mix-blend-multiply"
+              aria-hidden="true"
+            ></div>
+          </div>
+
+          {/* Overlapping Smaller Image (Production/Detail) */}
+          <div class="absolute bottom-0 left-0 w-[55%] h-[50%] rounded-[2rem] overflow-hidden shadow-2xl shadow-[#BD9343]/20 border-[6px] border-[#FCFBF8] z-20 hover:scale-[1.03] transition-transform duration-700">
+            <img
+              src="/olive-b.webp"
+              alt="Premium Olive Oil Extraction Process"
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
+
+          {/* Floating Quality Seal */}
+          <div class="absolute top-12 left-0 z-30 bg-white p-4 rounded-full shadow-xl border border-[#414A22]/5 animate-bounce-slow">
+            <div class="w-16 h-16 rounded-full bg-[#414A22] border border-[#BD9343]/30 flex flex-col items-center justify-center">
+              <span class="text-[#BD9343] text-xs font-serif italic">
+                Est.
+              </span>
+              <span class="text-[#FCFBF8] font-bold text-sm leading-none">
+                2011
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. RIGHT - Content & Typography */}
+      <div class="w-full lg:w-1/2 space-y-10">
+        <div>
+          <div class="inline-flex items-center gap-2 bg-[#414A22]/5 px-4 py-2 rounded-full mb-6 border border-[#414A22]/10">
+            <span
+              class="w-1.5 h-1.5 rounded-full bg-[#8A6A27]"
+              aria-hidden="true"
+            ></span>
+            <span class="text-[#414A22] text-[10px] font-black uppercase tracking-[0.3em]">
+              The OliveExtra Legacy
+            </span>
+          </div>
+
+          <h2 class="text-[#111] text-4xl md:text-5xl font-serif font-medium leading-[1.1] mb-6">
+            Rooted in Morocco, <br />
+            <span class="text-[#8A6A27] italic font-light">
+              Poured Globally.
+            </span>
+          </h2>
+
+          <div class="space-y-6">
+            <p class="text-[#414A22]/80 text-base leading-relaxed font-medium">
+              For over 15 years, OliveExtra has been the silent power behind
+              some of the world's most prestigious olive oil brands. We
+              operate at the intersection of ancestral Moroccan agricultural
+              wisdom and cutting-edge, high-volume export logistics.
+            </p>
+
+            <p class="text-[#414A22]/80 text-base leading-relaxed font-medium">
+              By partnering directly with generations of local farmers, we
+              ensure unmatched traceability, sustainable yields, and a
+              supply chain built for the rigorous demands of international
+              distribution.
+            </p>
+          </div>
+        </div>
+
+        {/* Premium Stats Grid */}
+        <div class="grid grid-cols-2 gap-x-8 gap-y-10 pt-8 border-t border-[#414A22]/10">
+          {highlights.map((item) => (
+            <div class="flex flex-col space-y-2">
+              <div class="text-[#414A22] text-3xl md:text-4xl font-serif font-bold">
+                {item.value}
+              </div>
+              <div class="flex items-center gap-2">
+                {/* Check Icon SVG */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-[#8A6A27]" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                <p class="text-[#414A22]/90 text-[10px] font-black uppercase tracking-widest">
+                  {item.label}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Download CTA */}
+        <div class="pt-6">
+          <button
+            class="group relative px-10 py-5 bg-transparent border-2 border-[#414A22] text-[#414A22] rounded-full overflow-hidden transition-all duration-700 hover:text-white flex items-center gap-3"
+            aria-label="Download OliveExtra Company Profile PDF"
+          >
+            <div class="absolute inset-0 bg-[#414A22] translate-y-full group-hover:translate-y-0 transition-transform duration-700 -z-10"></div>
+            
+            {/* Download Icon SVG */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="relative z-10 group-hover:-translate-y-1 transition-transform" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            
+            <span class="relative z-10 text-[10px] font-black uppercase tracking-[0.2em]">
+              Download Company Profile
+            </span>
+            
+            {/* ArrowRight Icon SVG */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="relative z-10 group-hover:translate-x-1 transition-transform opacity-0 group-hover:opacity-100 -ml-4 group-hover:ml-0" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
