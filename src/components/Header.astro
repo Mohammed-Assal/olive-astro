@@ -6,13 +6,24 @@ const navLinks = [
   { name: "Products", href: "/product" },
   { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/contact" },
-]; 
-import '../styles/global.css' 
+];
+import "../styles/global.css";
 // L'cart static l'had l'wa9t (ghadi nbdlouh mn b3d b Nano Stores)
 const cartItems = [
-  { id: 1, title: "Premium Olive Oil", price: 45, quantity: 2, image: "/olive-extra-logo.webp" } // Bdal l'image l chi 7aja 3ndk
+  {
+    id: 1,
+    title: "Premium Olive Oil",
+    price: 45,
+    quantity: 2,
+    image: "/olive-extra-logo.webp",
+  }, // Bdal l'image l chi 7aja 3ndk
 ];
+const whatsappNumber = "212708768573";
+const whatsappMessage = encodeURIComponent(
+  `Hello OliveExtra, I am interested in wholesale pricing for Olive Oil`
+);
 const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 ---
 
 <!-- HTML BDA HNA -->
@@ -22,7 +33,6 @@ const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 >
   <nav class="container mx-auto px-6">
     <div class="flex items-center justify-between">
-      
       {/* 1. LOGO */}
       <a href="/" class="relative z-50" aria-label="Olive Extra Homepage">
         <img
@@ -36,90 +46,69 @@ const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
       {/* 2. DESKTOP NAV */}
       <div class="hidden md:flex items-center space-x-10">
-        {navLinks.map((link) => (
-          <a
-            href={link.href}
-            class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#414A22] hover:text-[#8A6A27] transition-colors duration-300"
-          >
-            {link.name}
-          </a>
-        ))}
+        {
+          navLinks.map((link) => (
+            <a
+              href={link.href}
+              class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#414A22] hover:text-[#8A6A27] transition-colors duration-300"
+            >
+              {link.name}
+            </a>
+          ))
+        }
       </div>
 
       {/* 3. ACTIONS */}
       <div class="flex items-center gap-6">
-        <div class="relative">
-          <button
-            id="cart-btn"
-            class="group relative p-2 rounded-full text-white bg-[#414A22] hover:bg-[#2A3015] transition-all duration-300"
-            aria-label={`Open Cart`}
+        <a
+          href={whatsappLink}
+          target={"_blank"}
+          rel="noopener noreferrer"
+          class={`p-4 rounded-full transition-all duration-500 shadow-sm border border-black/5 flex items-center justify-center
+        ${"bg-[#FCFBF8] text-[#414A22] hover:scale-110 hover:bg-[#25D366] hover:text-white hover:border-[#25D366]"}`}
+          title="Request Quote via WhatsApp"
+        >
+          {/* WhatsApp SVG Icon */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           >
-            {/* ShoppingCart SVG Icon */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-            
-            {totalItems > 0 && (
-              <span class="absolute top-0 right-0 bg-[#BD9343] text-[#2A3015] text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-full shadow-sm">
-                {totalItems}
-              </span>
-            )}
-          </button>
-
-          {/* Cart Dropdown (Mkhbi f l'bdya) */}
-          <div id="cart-dropdown" class="hidden">
-            <div id="cart-overlay" class="fixed inset-0 z-[-1]"></div>
-            <div class="absolute right-0 mt-6 w-80 bg-white rounded-[2rem] shadow-2xl border border-[#414A22]/10 z-50 overflow-hidden">
-              <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                <span class="text-[10px] font-black uppercase tracking-widest text-[#414A22]">
-                  Your Selection
-                </span>
-                <span class="text-[10px] text-[#8A6A27] font-bold">
-                  {totalItems} Items
-                </span>
-              </div>
-              <div class="max-h-[350px] overflow-y-auto px-2">
-                {cartItems.length === 0 ? (
-                  <div class="py-12 text-center">
-                    <p class="text-[11px] uppercase tracking-widest text-gray-600 font-bold">
-                      Cart is empty
-                    </p>
-                  </div>
-                ) : (
-                  cartItems.map((item) => (
-                    <div class="flex gap-4 p-4 hover:bg-[#FCFBF8] rounded-[1.5rem] transition-colors group">
-                      <div class="relative w-16 h-16 rounded-xl overflow-hidden border border-gray-200 flex-shrink-0 bg-gray-100">
-                        <img src={item.image} alt={item.title} class="w-full h-full object-cover" />
-                      </div>
-                      <div class="flex-1">
-                        <p class="text-xs font-bold text-[#414A22] line-clamp-1">{item.title}</p>
-                        <p class="text-[10px] text-gray-600 mt-1 font-bold">
-                          {item.quantity}L × <span class="text-[#8A6A27]">${item.price}</span>
-                        </p>
-                      </div>
-                      <button class="self-center p-2 opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-600 transition-all">
-                        {/* Trash SVG Icon */}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-                      </button>
-                    </div>
-                  ))
-                )}
-              </div>
-              {cartItems.length > 0 && (
-                <div class="p-6 bg-[#FCFBF8] border-t border-gray-100">
-                  <a href="/cart" class="flex items-center justify-center gap-3 w-full bg-[#414A22] text-white py-4 rounded-full text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#2A3015] transition-all shadow-lg active:scale-95">
-                    Checkout Now 
-                    {/* ArrowRight SVG Icon */}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                  </a>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+            <path
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+            ></path>
+          </svg>
+        </a>
 
         {/* Mobile Menu Toggle */}
-        <button id="mobile-menu-btn" class="md:hidden p-2 text-[#414A22] hover:text-[#2A3015] transition-colors" aria-label="Open mobile menu">
+        <button
+          id="mobile-menu-btn"
+          class="md:hidden p-2 text-[#414A22] hover:text-[#2A3015] transition-colors"
+          aria-label="Open mobile menu"
+        >
           {/* Menu SVG Icon */}
-          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><line x1="4" x2="20" y1="12" y2="12"></line><line
+              x1="4"
+              x2="20"
+              y1="6"
+              y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg
+          >
         </button>
       </div>
     </div>
@@ -127,71 +116,129 @@ const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 </header>
 
 {/* 4. MOBILE NAVIGATION */}
-<div id="mobile-menu" class="hidden fixed inset-0 bg-white z-[100] flex-col md:hidden">
-  <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-    <p class="text-[10px] font-black uppercase tracking-[0.3em] text-[#8A6A27]">Menu</p>
+<div
+  id="mobile-menu"
+  class="hidden fixed inset-0 bg-white z-[100] flex-col md:hidden"
+>
+  <div
+    class="flex items-center justify-between px-6 py-5 border-b border-gray-100"
+  >
+    <p class="text-[10px] font-black uppercase tracking-[0.3em] text-[#8A6A27]">
+      Menu
+    </p>
     <button id="close-menu-btn" class="p-2" aria-label="Close mobile menu">
       {/* X SVG Icon */}
-      <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#414A22]"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="26"
+        height="26"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-[#414A22]"
+        ><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg
+      >
     </button>
   </div>
 
   <div class="flex-1 px-8 py-12 flex flex-col space-y-8 overflow-y-auto">
-    {navLinks.map((link) => (
-      <a href={link.href} class="mobile-link text-3xl font-serif italic text-[#414A22] flex justify-between items-center group border-b border-gray-100 pb-4 hover:text-[#8A6A27] transition-colors">
-        {link.name}
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#8A6A27] opacity-50 group-hover:opacity-100 transition-all"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      </a>
-    ))}
+    {
+      navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="mobile-link text-3xl font-serif italic text-[#414A22] flex justify-between items-center group border-b border-gray-100 pb-4 hover:text-[#8A6A27] transition-colors"
+        >
+          {link.name}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="text-[#8A6A27] opacity-50 group-hover:opacity-100 transition-all"
+          >
+            <>
+              <path d="M5 12h14" />
+              <path d="m12 5 7 7-7 7" />
+            </>
+          </svg>
+        </a>
+      ))
+    }
   </div>
 
   <div class="p-8 bg-[#FCFBF8]">
-    <p class="text-[10px] font-black uppercase tracking-[0.3em] text-[#8A6A27] mb-2">OliveExtra Export</p>
-    <p class="text-xs text-[#414A22]/80 font-medium">Moroccan Essence, Global Excellence</p>
+    <p
+      class="text-[10px] font-black uppercase tracking-[0.3em] text-[#8A6A27] mb-2"
+    >
+      OliveExtra Export
+    </p>
+    <p class="text-xs text-[#414A22]/80 font-medium">
+      Moroccan Essence, Global Excellence
+    </p>
   </div>
 </div>
 
 <!-- JAVASCRIPT BDA HNA (kay3wd useState w useEffect) -->
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener("DOMContentLoaded", () => {
     // 1. Scroll Effect l'Header
-    const header = document.getElementById('main-header');
-    window.addEventListener('scroll', () => {
+    const header = document.getElementById("main-header");
+    window.addEventListener("scroll", () => {
       if (window.scrollY > 20) {
-        header?.classList.remove('bg-white/95', 'backdrop-blur-md', 'py-3', 'shadow-sm');
-        header?.classList.add('bg-white', 'shadow-md', 'py-2');
+        header?.classList.remove(
+          "bg-white/95",
+          "backdrop-blur-md",
+          "py-3",
+          "shadow-sm"
+        );
+        header?.classList.add("bg-white", "shadow-md", "py-2");
       } else {
-        header?.classList.add('bg-white/95', 'backdrop-blur-md', 'py-3', 'shadow-sm');
-        header?.classList.remove('bg-white', 'shadow-md', 'py-2');
+        header?.classList.add(
+          "bg-white/95",
+          "backdrop-blur-md",
+          "py-3",
+          "shadow-sm"
+        );
+        header?.classList.remove("bg-white", "shadow-md", "py-2");
       }
     });
 
     // 2. Mobile Menu Toggle
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const closeMenuBtn = document.getElementById('close-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileLinks = document.querySelectorAll('.mobile-link');
+    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+    const closeMenuBtn = document.getElementById("close-menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const mobileLinks = document.querySelectorAll(".mobile-link");
 
     const toggleMenu = () => {
-      mobileMenu?.classList.toggle('hidden');
-      mobileMenu?.classList.toggle('flex');
-      document.body.style.overflow = mobileMenu?.classList.contains('flex') ? 'hidden' : 'unset';
+      mobileMenu?.classList.toggle("hidden");
+      mobileMenu?.classList.toggle("flex");
+      document.body.style.overflow = mobileMenu?.classList.contains("flex")
+        ? "hidden"
+        : "unset";
     };
 
-    mobileMenuBtn?.addEventListener('click', toggleMenu);
-    closeMenuBtn?.addEventListener('click', toggleMenu);
-    mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+    mobileMenuBtn?.addEventListener("click", toggleMenu);
+    closeMenuBtn?.addEventListener("click", toggleMenu);
+    mobileLinks.forEach((link) => link.addEventListener("click", toggleMenu));
 
     // 3. Cart Toggle
-    const cartBtn = document.getElementById('cart-btn');
-    const cartDropdown = document.getElementById('cart-dropdown');
-    const cartOverlay = document.getElementById('cart-overlay');
+    const cartBtn = document.getElementById("cart-btn");
+    const cartDropdown = document.getElementById("cart-dropdown");
+    const cartOverlay = document.getElementById("cart-overlay");
 
     const toggleCart = () => {
-      cartDropdown?.classList.toggle('hidden');
+      cartDropdown?.classList.toggle("hidden");
     };
 
-    cartBtn?.addEventListener('click', toggleCart);
-    cartOverlay?.addEventListener('click', toggleCart);
+    cartBtn?.addEventListener("click", toggleCart);
+    cartOverlay?.addEventListener("click", toggleCart);
   });
 </script>

@@ -1,12 +1,13 @@
 ---
 // src/pages/blog/index.astro
-import '../../styles/global.css';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
+import "../../styles/global.css";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
 
 // 1. SEO Variables (Mn l'code dyalk)
 const title = "OliveExtra Blog | Wholesale Moroccan Olive Oil Export Insights";
-const description = "Expert articles on Moroccan olive oil production, global export standards, and wholesale market trends. Stay informed with the latest insights for importers and distributors.";
+const description =
+  "Expert articles on Moroccan olive oil production, global export standards, and wholesale market trends. Stay informed with the latest insights for importers and distributors.";
 const siteUrl = "https://oliveextra.com/blog";
 const imageUrl = "/olive-extra-logo.webp";
 
@@ -15,34 +16,36 @@ let blogs = [];
 let categories = ["All"];
 
 try {
-  // Bdl had l'URL b l'URL dyal l'API s7i7 dyalk
-  const res = await fetch('https://back.oliveextra.com/api/blog/getallBlogs');
+  const res = await fetch("https://back.oliveextra.com/api/blog/getallBlogs");
   const data = await res.json();
-  
-  // T2kkd mn l'format dyal retour dyal l'API dyalk (wach array nishan awla data.data)
-  blogs = data.data || data || [];
-  
-  // Jbd les catégories l'unique mn l'blogs
-  const uniqueCats = [...new Set(blogs.map((b: any) => b.category).filter(Boolean))];
-  categories = ["All", ...uniqueCats as string[]];
+
+  blogs = data.data || data || []
+  const uniqueCats = [
+    ...new Set(blogs.map((b: any) => b.category).filter(Boolean)),
+  ];
+  categories = ["All", ...(uniqueCats as string[])];
 } catch (error) {
   console.error("Error fetching blogs:", error);
 }
 
 // Fonction sghira bach n-formatiw t-tarikh f Serveur
 const formatDate = (dateString: string) => {
-  if (!dateString) return '';
-  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString('en-US', options);
+  if (!dateString) return "";
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return new Date(dateString).toLocaleDateString("en-US", options);
 };
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow" />
@@ -63,89 +66,147 @@ const formatDate = (dateString: string) => {
     <link rel="icon" type="image/webp" href="/olive-extra-logo.webp" />
   </head>
 
-  <body class="min-h-screen flex flex-col bg-[#FCFBF8] selection:bg-[#414A22] selection:text-white">
+  <body
+    class="min-h-screen flex flex-col bg-[#FCFBF8] selection:bg-[#414A22] selection:text-white"
+  >
     <Header />
 
     <main class="flex-1 pb-24 mt-24">
       {/* 1. EDITORIAL HERO */}
       <section class="pt-10 lg:pt-20 pb-16 relative overflow-hidden">
         {/* Organic Glow */}
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#414A22]/5 blur-[120px] rounded-full pointer-events-none -z-10" aria-hidden="true"></div>
-        
-        <div class="container mx-auto px-4 text-center max-w-4xl animate-fade-in-up">
+        <div
+          class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#414A22]/5 blur-[120px] rounded-full pointer-events-none -z-10"
+          aria-hidden="true"
+        >
+        </div>
+
+        <div
+          class="container mx-auto px-4 text-center max-w-4xl animate-fade-in-up"
+        >
           <div class="flex items-center justify-center gap-2 mb-4">
             {/* Leaf SVG */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#BD9343]"><path d="M11 20A7 7 0 0 1 14 6c5.5 0 8 2.5 8 2.5s-2.5 8-8 8a7 7 0 0 1-3 10Z"/><path d="m2 22 9-9"/></svg>
-            <span class="text-[10px] font-bold tracking-[0.3em] text-[#414A22]/60 uppercase">The Art of Living</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="text-[#BD9343]"
+              ><path
+                d="M11 20A7 7 0 0 1 14 6c5.5 0 8 2.5 8 2.5s-2.5 8-8 8a7 7 0 0 1-3 10Z"
+              ></path><path d="m2 22 9-9"></path></svg
+            >
+            <span
+              class="text-[10px] font-bold tracking-[0.3em] text-[#414A22]/60 uppercase"
+              >The Art of Living</span
+            >
           </div>
-          <h1 class="text-[2.8rem] lg:text-[4.5rem] font-serif italic font-medium text-[#414A22] tracking-tight leading-[1.1] mb-10">
-            OliveExtra <span class="text-[#BD9343] not-italic font-light">Archive.</span>
+          <h1
+            class="text-[2.8rem] lg:text-[4.5rem] font-serif italic font-medium text-[#414A22] tracking-tight leading-[1.1] mb-10"
+          >
+            OliveExtra <span class="text-[#BD9343] not-italic font-light"
+              >Archive.</span
+            >
           </h1>
-          
+
           {/* CATEGORY FILTER */}
-          <div class="flex flex-wrap justify-center gap-3" id="category-filters">
-            {categories.map((cat, index) => (
-              <button
-                data-category={cat}
-                class={`category-btn px-6 py-2.5 rounded-full text-[11px] font-bold tracking-widest uppercase transition-all duration-500 border ${
-                  index === 0 
-                    ? "bg-[#414A22] text-white shadow-xl shadow-[#414A22]/20 scale-105 border-[#414A22] active-cat" 
-                    : "bg-white border-[#414A22]/10 text-[#414A22]/50 hover:border-[#BD9343] hover:text-[#BD9343]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          <div
+            class="flex flex-wrap justify-center gap-3"
+            id="category-filters"
+          >
+            {
+              categories.map((cat, index) => (
+                <button
+                  data-category={cat}
+                  class={`category-btn px-6 py-2.5 rounded-full text-[11px] font-bold tracking-widest uppercase transition-all duration-500 border ${
+                    index === 0
+                      ? "bg-[#414A22] text-white shadow-xl shadow-[#414A22]/20 scale-105 border-[#414A22] active-cat"
+                      : "bg-white border-[#414A22]/10 text-[#414A22]/50 hover:border-[#BD9343] hover:text-[#BD9343]"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))
+            }
           </div>
         </div>
       </section>
 
       {/* 2. BLOG GRID */}
       <div class="container mx-auto px-4 lg:px-8 max-w-[1400px]">
-        {blogs.length === 0 ? (
-          <div class="text-center py-20 text-[#414A22]/60 font-medium">
-            No articles found at the moment. Please check back later.
-          </div>
-        ) : (
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12" id="blog-grid">
-            {blogs.map((post: any) => (
-              // Zdt data-category hna bach JavaScript y3rf y-filtri
-              <article data-category={post.category || 'Uncategorized'} class="blog-card flex flex-col group mb-10 animate-fade-in-up">
-                <a href={`/blog/${post.slug}`} class="block relative w-full">
-                  <div class="relative w-full aspect-[3/4] rounded-[2rem] lg:rounded-[3rem] overflow-hidden bg-white mb-6 shadow-sm border border-[#414A22]/5">
-                    <img
-                      src={post.image?.url || '/olive-extra-logo.webp'}
-                      alt={post.postTitle}
-                      loading="lazy"
-                      class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s] ease-out"
-                    />
-                    {post.category && (
-                      <div class="absolute top-4 left-4 lg:top-6 lg:left-6 bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full text-[9px] font-bold text-[#414A22] uppercase tracking-widest shadow-sm border border-[#414A22]/5">
-                        {post.category}
+        {
+          blogs.length === 0 ? (
+            <div class="text-center py-20 text-[#414A22]/60 font-medium">
+              No articles found at the moment. Please check back later.
+            </div>
+          ) : (
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12"
+              id="blog-grid"
+            >
+              {blogs.map((post: any) => (
+                // Zdt data-category hna bach JavaScript y3rf y-filtri
+                <article
+                  data-category={post.category || "Uncategorized"}
+                  class="blog-card flex flex-col group mb-10 animate-fade-in-up"
+                >
+                  <a href={`/blog/${post.slug}`} class="block relative w-full">
+                    <div class="relative w-full aspect-[3/4] rounded-[2rem] lg:rounded-[3rem] overflow-hidden bg-white mb-6 shadow-sm border border-[#414A22]/5">
+                      <img
+                        src={post.image?.url || "/olive-extra-logo.webp"}
+                        alt={post.postTitle}
+                        loading="lazy"
+                        class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s] ease-out"
+                      />
+                      {post.category && (
+                        <div class="absolute top-4 left-4 lg:top-6 lg:left-6 bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full text-[9px] font-bold text-[#414A22] uppercase tracking-widest shadow-sm border border-[#414A22]/5">
+                          {post.category}
+                        </div>
+                      )}
+                    </div>
+
+                    <div class="px-2">
+                      <div class="flex items-center gap-3 text-[10px] font-bold text-[#BD9343] mb-3 uppercase tracking-[0.25em]">
+                        {formatDate(post.publishedAt || post.createdAt)}
                       </div>
-                    )}
-                  </div>
 
-                  <div class="px-2">
-                    <div class="flex items-center gap-3 text-[10px] font-bold text-[#BD9343] mb-3 uppercase tracking-[0.25em]">
-                      {formatDate(post.publishedAt || post.createdAt)}
+                      <h2 class="text-[1.1rem] lg:text-[1.6rem] font-serif font-medium text-[#414A22] leading-[1.3] mb-4 group-hover:text-[#BD9343] transition-colors duration-500 line-clamp-3">
+                        {post.postTitle}
+                      </h2>
+
+                      <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-700">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-[#414A22]">
+                          Discover More
+                        </span>
+                        {/* ArrowUpRight SVG */}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="text-[#BD9343]"
+                        >
+                          <path d="M7 7h10v10" />
+                          <path d="M7 17 17 7" />
+                        </svg>
+                      </div>
                     </div>
-
-                    <h2 class="text-[1.1rem] lg:text-[1.6rem] font-serif font-medium text-[#414A22] leading-[1.3] mb-4 group-hover:text-[#BD9343] transition-colors duration-500 line-clamp-3">
-                      {post.postTitle}
-                    </h2>
-
-                    <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-700">
-                      <span class="text-[10px] font-black uppercase tracking-widest text-[#414A22]">Discover More</span>
-                      {/* ArrowUpRight SVG */}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#BD9343]"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
-                    </div>
-                  </div>
-                </a>
-              </article>
-            ))}
-          </div>
-        )}
+                  </a>
+                </article>
+              ))}
+            </div>
+          )
+        }
       </div>
     </main>
 
@@ -153,34 +214,51 @@ const formatDate = (dateString: string) => {
 
     {/* JAVASCRIPT L'FILTRAGE DYAL LES CATEGORIES */}
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const buttons = document.querySelectorAll('.category-btn');
-        const cards = document.querySelectorAll('.blog-card');
+      document.addEventListener("DOMContentLoaded", () => {
+        const buttons = document.querySelectorAll(".category-btn");
+        const cards = document.querySelectorAll(".blog-card");
 
-        buttons.forEach(button => {
-          button.addEventListener('click', () => {
+        buttons.forEach((button) => {
+          button.addEventListener("click", () => {
             // 1. T7iyed l'active state mn ga3 les boutons
-            buttons.forEach(btn => {
-              btn.classList.remove('bg-[#414A22]', 'text-white', 'shadow-xl', 'scale-105', 'active-cat');
-              btn.classList.add('bg-white', 'text-[#414A22]/50');
+            buttons.forEach((btn) => {
+              btn.classList.remove(
+                "bg-[#414A22]",
+                "text-white",
+                "shadow-xl",
+                "scale-105",
+                "active-cat"
+              );
+              btn.classList.add("bg-white", "text-[#414A22]/50");
             });
 
             // 2. Tzid l'active state l bouton li twrek 3lih
-            button.classList.remove('bg-white', 'text-[#414A22]/50');
-            button.classList.add('bg-[#414A22]', 'text-white', 'shadow-xl', 'scale-105', 'active-cat');
+            button.classList.remove("bg-white", "text-[#414A22]/50");
+            button.classList.add(
+              "bg-[#414A22]",
+              "text-white",
+              "shadow-xl",
+              "scale-105",
+              "active-cat"
+            );
 
             // 3. N-filtriw l'cards
-            const selectedCategory = button.getAttribute('data-category');
+            const selectedCategory = button.getAttribute("data-category");
 
-            cards.forEach(card => {
-              const cardCategory = card.getAttribute('data-category');
-              if (selectedCategory === 'All' || cardCategory === selectedCategory) {
-                (card as HTMLElement).style.display = 'flex';
+            cards.forEach((card) => {
+              const cardCategory = card.getAttribute("data-category");
+              if (
+                selectedCategory === "All" ||
+                cardCategory === selectedCategory
+              ) {
+                (card as HTMLElement).style.display = "flex";
                 // Animation sghira
-                (card as HTMLElement).style.opacity = '0';
-                setTimeout(() => { (card as HTMLElement).style.opacity = '1'; }, 50);
+                (card as HTMLElement).style.opacity = "0";
+                setTimeout(() => {
+                  (card as HTMLElement).style.opacity = "1";
+                }, 50);
               } else {
-                (card as HTMLElement).style.display = 'none';
+                (card as HTMLElement).style.display = "none";
               }
             });
           });

@@ -1,20 +1,239 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
+// src/pages/blog/[slug].astro
+import '../../styles/global.css';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
 
-export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
+// Bima ana l'backend kaytzado fih l'blogs, kan-goulou l'Astro ykhdm had l'page b SSR (Server-Side Rendering)
+export const prerender = false; 
+
+const { slug } = Astro.params;
+
+// 1. Fetch Blog Data
+let blog = null;
+try {
+  const res = await fetch(`https://back.oliveextra.com/api/blog/${slug}`);
+  if (!res.ok) {
+    return Astro.redirect('/404'); // Redirect ila l'blog makaynch
+  }
+  blog = await res.json();
+} catch (error) {
+  console.error("Error fetching blog:", error);
+  return Astro.redirect('/404');
 }
-type Props = CollectionEntry<'blog'>;
 
-const post = Astro.props;
-const { Content } = await render(post);
+// 2. SEO Variables (Geo, Aeo, Indexing)
+const title = blog?.metaTitle || blog?.postTitle || "Olive Extra Blog";
+// Kan7iydo l'balises HTML mn l'description bach maykhasrouch l'meta tag
+const rawDescription = blog?.metaDescription || blog?.content || "";
+const description = rawDescription.replace(/(<([^>]+)>)/gi, "").substring(0, 160) + "...";
+const imageUrl = blog?.image?.url || "https://www.oliveextra.com/oliveextra-logo.webp";
+const url = `https://www.oliveextra.com/blog/${slug}`;
+const publishedTime = blog?.publishedAt || blog?.createdAt;
+const author = blog?.user?.name || "OliveExtra Editorial";
+
+// 3. JSON-LD (Structured Data l'Google w Answer Engines)
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "image": imageUrl,
+  "author": {
+    "@type": "Organization",
+    "name": author,
+    "url": "https://www.oliveextra.com"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Olive Extra",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.oliveextra.com/oliveextra-logo.webp"
+    }
+  },
+  "datePublished": publishedTime,
+  "dateModified": blog?.updatedAt || publishedTime,
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": url
+  }
+};
+
+// 4. Function: Inject Banners into Content (Kat-exécuta f Serveur)
+const injectBannersIntoContent = (htmlContent: string, galleryArray: any[]) => {
+  if (!htmlContent || !galleryArray || galleryArray.length === 0) return htmlContent;
+
+  let h2Counter = 0;
+  const unassignedImages = [...galleryArray.filter((img) => !img.index)];
+
+  return htmlContent.replace(/<\/h2>/g, () => {
+    h2Counter++;
+    const matchingIndexedImages = galleryArray.filter(
+      (img) => img.index && Number(img.index) === h2Counter
+    );
+    let imagesToRender = [...matchingIndexedImages];
+    
+    if (imagesToRender.length === 0 && unassignedImages.length > 0) {
+      const nextImage = unassignedImages.shift();
+      if (nextImage) imagesToRender.push(nextImage);
+    }
+    if (imagesToRender.length === 0) return `</h2>`;
+
+    const imagesHTML = imagesToRender.map((img) => `
+      <figure class="oe-gallery-figure">
+        <div class="oe-gallery-frame">
+          <img
+            src="${img.url}"
+            alt="${img.alt || "OliveExtra Premium Quality"}"
+            width="900" height="562"
+            loading="lazy" decoding="async"
+            class="oe-gallery-img"
+          />
+        </div>
+        ${img.alt ? `<figcaption class="oe-gallery-caption">${img.alt}</figcaption>` : ""}
+      </figure>
+    `).join("");
+
+    return `</h2>${imagesHTML}`;
+  });
+};
+
+const modifiedContent = injectBannersIntoContent(blog.content, blog.galleryImages);
+
+// Date Formatter
+const formatDate = (dateString: string) => {
+  if (!dateString) return '';
+  return new Date(dateString).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+};
 ---
 
-<BlogPost {...post.data}>
-	<Content />
-</BlogPost>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#414A22" />
+    
+    {/* Primary Meta Tags */}
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={url} />
+
+    {/* Open Graph / Facebook */}
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:site_name" content="Olive Extra" />
+    <meta property="article:published_time" content={publishedTime} />
+    <meta property="article:author" content={author} />
+    <meta property="article:section" content={blog?.category || "Olive Extra"} />
+
+    {/* Twitter */}
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={imageUrl} />
+    <meta name="twitter:site" content="@OliveExtra" />
+
+    <link rel="icon" type="image/webp" href="/olive-extra-logo.webp" />
+
+    {/* Schema.org JSON-LD l Google AEO/GEO */}
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+
+  <body class="bg-gray-100 min-h-screen flex flex-col">
+    <Header />
+
+    <main class="flex-grow oe-page">
+      <article>
+        {/* ── HEADER ── */}
+        <header class="oe-header mt-24">
+          <h1 class="oe-title">{blog.postTitle || blog.metaTitle}</h1>
+
+          {/* Meta row */}
+          <div class="oe-meta" role="complementary" aria-label="Article info">
+            <div class="oe-meta-divider" aria-hidden="true"></div>
+            <div class="oe-meta-row">
+              {/* Author badge */}
+              <div class="oe-author">
+                <div class="oe-author-avatar" aria-hidden="true">OE</div>
+                <div class="oe-author-info">
+                  <span class="oe-author-name">{author}</span>
+                  <time datetime={publishedTime} class="oe-date">
+                    {formatDate(publishedTime)}
+                  </time>
+                </div>
+              </div>
+
+              {/* Read time */}
+              <div class="oe-readtime">
+                {/* Clock SVG */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="oe-clock-icon" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>5 min read</span>
+              </div>
+            </div>
+            <div class="oe-meta-divider" aria-hidden="true"></div>
+          </div>
+        </header>
+
+        {/* ── HERO IMAGE ── */}
+        {imageUrl && (
+          <div class="oe-hero">
+            <div class="oe-hero-frame">
+              <img
+                src={imageUrl}
+                alt={blog.featuredImageAlt || title}
+                width="1200"
+                height="750"
+                class="oe-hero-img"
+                style="width: 100%; height: auto; object-fit: cover;"
+              />
+              <div class="oe-hero-overlay" aria-hidden="true"></div>
+            </div>
+            {/* Decorative label */}
+            <div class="oe-hero-label" aria-hidden="true">
+              Atlas Mountains · Morocco · Extra Virgin
+            </div>
+          </div>
+        )}
+
+        {/* ── CONTENT ── */}
+        <section class="oe-content-section" aria-label="Article content">
+          <div
+            class="olive-content"
+            set:html={modifiedContent}
+          ></div>
+        </section>
+
+        {/* ── FOOTER CTA ── */}
+        <footer class="oe-cta-footer">
+          <div class="oe-cta-inner">
+            <div class="oe-cta-ornament" aria-hidden="true">◆</div>
+            <div class="oe-cta-text">
+              <p class="oe-cta-eyebrow">Premium Private Label</p>
+              <p class="oe-cta-headline">
+                Olive<em>Extra</em>
+              </p>
+              <p class="oe-cta-sub">
+                Bringing the finest Moroccan olive oil from the Atlas groves to your table.
+              </p>
+            </div>
+
+            <a href="/contact" class="oe-cta-btn">
+              Inquire Wholesale
+              {/* ArrowUpRight SVG */}
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="oe-cta-icon" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+            </a>
+          </div>
+        </footer>
+      </article>
+    </main>
+
+    <Footer />
+  </body>
+</html>

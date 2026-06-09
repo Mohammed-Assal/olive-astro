@@ -1,0 +1,414 @@
+---
+// src/pages/product/[slug].astro
+import "../../styles/global.css";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+
+export const prerender = false; // SSR for dynamic backend data
+
+const { slug } = Astro.params;
+const baseUrl = "https://www.oliveextra.com";
+
+// 1. Fetch Product Data
+let product = null;
+try {
+  const res = await fetch(`https://back.oliveextra.com/api/product/${slug}`);
+  if (!res.ok) {
+    return Astro.redirect("/404");
+  }
+  product = await res.json();
+} catch (error) {
+  console.error("Error fetching product:", error);
+  return Astro.redirect("/404");
+}
+
+// 2. SEO & AEO Variables
+const title = `${product.metaTitle || product.title} | Premium Moroccan Export`;
+const description = (
+  product.metaDescription ||
+  product.shortDescription ||
+  ""
+).slice(0, 160);
+const imageUrl = product.mainImage?.url || `${baseUrl}/olive-extra-logo.webp`;
+const productUrl = `${baseUrl}/product/${slug}`;
+const hasDiscount = product.discountPrice && product.discountPrice < product.price;
+const isOutOfStock = product.stock !== "in_stock";
+
+// Combine Main Image and Gallery for the Thumbnail Grid
+const allGalleryImages = [
+  { url: imageUrl, alt: "Main Cover Image" },
+  ...(product.gallery || [])
+];
+
+// WhatsApp Logic
+const whatsappNumber = "212708768573";
+const whatsappMessage = encodeURIComponent(
+  `Hello OliveExtra, I am interested in wholesale pricing and export details for: ${product.title}`
+);
+const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
+// 3. JSON-LD Structured Data 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": productUrl,
+  name: product.title,
+  image: [imageUrl],
+  description: description,
+  sku: product.sku || slug,
+  url: productUrl,
+  brand: {
+    "@type": "Brand",
+    name: "OliveExtra",
+    url: baseUrl,
+  },
+  offers: {
+    "@type": "Offer",
+    "@id": `${productUrl}#offer`,
+    url: productUrl,
+    priceCurrency: "USD",
+    price: String(product.discountPrice || product.price),
+    priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+      .toISOString()
+      .split("T")[0],
+    availability: isOutOfStock
+      ? "https://schema.org/OutOfStock"
+      : "https://schema.org/InStock",
+    itemCondition: "https://schema.org/NewCondition",
+    seller: {
+      "@type": "Organization",
+      name: "OliveExtra",
+      url: baseUrl,
+    },
+  },
+};
+
+// 4. Inject Banners Safely
+const injectBannersIntoContent = (htmlContent: string, galleryArray: any[]) => {
+  if (!htmlContent || !galleryArray || galleryArray.length === 0)
+    return htmlContent;
+
+  let h2Counter = 0;
+  const unassignedImages = [...galleryArray.filter((img) => !img.index)];
+
+  return htmlContent.replace(/<\/h2>/g, () => {
+    h2Counter++;
+    const matchingIndexedImages = galleryArray.filter(
+      (img) => img.index && Number(img.index) === h2Counter
+    );
+    let imagesToRender = [...matchingIndexedImages];
+
+    if (imagesToRender.length === 0 && unassignedImages.length > 0) {
+      const nextImg = unassignedImages.shift();
+      if (nextImg) imagesToRender.push(nextImg);
+    }
+    if (imagesToRender.length === 0) return `</h2>`;
+
+    const imagesHTML = imagesToRender
+      .map(
+        (img) => `
+      <figure class="my-10 w-full rounded-2xl overflow-hidden shadow-sm border border-[#414A22]/5 bg-white">
+        <img
+          src="${img.url}"
+          alt="${img.alt || "OliveExtra Premium Quality"}"
+          loading="lazy"
+          class="w-full h-auto object-cover max-h-[500px]"
+        />
+        ${img.alt ? `<figcaption class="text-center text-xs text-[#414A22]/60 p-3 bg-gray-50 border-t border-gray-100">${img.alt}</figcaption>` : ""}
+      </figure>
+    `
+      )
+      .join("");
+
+    return `</h2>${imagesHTML}`;
+  });
+};
+
+const modifiedContent = injectBannersIntoContent(
+  product.description,
+  product.galleryImages || []
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FCFBF8" />
+
+    {/* SEO Meta Tags */}
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={productUrl} />
+
+    {/* Open Graph */}
+    <meta property="og:type" content="product" />
+    <meta property="og:url" content={productUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Olive Extra" />
+    <meta property="product:price:amount" content={String(product.discountPrice || product.price)} />
+    <meta property="product:price:currency" content="USD" />
+
+    {/* Twitter */}
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={productUrl} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={imageUrl} />
+
+    <link rel="icon" type="image/webp" href="/olive-extra-logo.webp" />
+
+    {/* JSON-LD for Google */}
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <link rel="preload" as="image" href={imageUrl} />
+  </head>
+
+  <body class="bg-[#FCFBF8] min-h-screen flex flex-col font-sans">
+    <Header />
+
+    <main class="flex-grow pt-28 pb-20">
+
+      {/* Breadcrumbs */}
+      <nav
+        class="max-w-6xl mx-auto px-4 sm:px-6 mb-8 text-[11px] font-bold tracking-widest uppercase text-[#414A22]/50 flex flex-wrap items-center gap-1"
+      >
+        <a href="/" class="hover:text-[#BD9343] transition-colors">Home</a>
+        <span>/</span>
+        <a href="/products" class="hover:text-[#BD9343] transition-colors">Boutique</a>
+        <span>/</span>
+        <span class="text-[#414A22]">{product.category || "Product"}</span>
+      </nav>
+
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="flex flex-col lg:flex-row items-start gap-10 lg:gap-16">
+
+          {/* ── Left: Image Column ── */}
+          <div class="flex flex-col gap-4 w-full lg:w-[480px] lg:shrink-0">
+            <div
+              class="relative w-full aspect-square bg-white rounded-3xl overflow-hidden border border-[#414A22]/10 shadow-sm flex items-center justify-center p-6"
+            >
+              <img
+                id="main-product-image"
+                src={imageUrl}
+                alt={product.title}
+                fetchpriority="high"
+                class="w-full h-full object-contain hover:scale-105 transition-all duration-300"
+              />
+              {
+                hasDiscount && (
+                  <div class="absolute top-6 left-6 bg-[#BD9343] text-white px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase shadow-md">
+                    Offer -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}%
+                  </div>
+                )
+              }
+            </div>
+
+            {/* Thumbnail Gallery */}
+            {
+              allGalleryImages.length > 1 && (
+                <div class="grid grid-cols-4 gap-3">
+                  {allGalleryImages.map((img: any, i: number) => (
+                    <button
+                      type="button"
+                      aria-label={`View image ${i + 1}`}
+                      data-full-src={img.url || "/olive-extra-logo.webp"}
+                      class={`gallery-thumbnail aspect-square rounded-xl border bg-white overflow-hidden cursor-pointer hover:border-[#BD9343] transition-colors p-2 flex items-center justify-center focus:outline-none ${i === 0 ? 'border-[#BD9343]' : 'border-[#414A22]/10'}`}
+                    >
+                      <img
+                        src={img.url || "/olive-extra-logo.webp"}
+                        alt={`Thumbnail ${i + 1}`}
+                        loading="lazy"
+                        class="object-contain h-full w-full pointer-events-none"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )
+            }
+          </div>
+
+          {/* ── Right: Product Details ── */}
+          <div class="flex flex-col w-full lg:flex-1 lg:pt-2">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-[#414A22]/5 rounded-lg w-fit mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[#BD9343]">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              <span class="text-[10px] font-bold tracking-widest uppercase text-[#414A22]">
+                Certified Origin
+              </span>
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-serif font-medium text-[#111] mb-6 leading-[1.15]">
+              {product.title}
+            </h1>
+
+            {/* Pricing */}
+            <div class="flex items-end gap-4 mb-8 pb-8 border-b border-[#414A22]/10">
+              <span class="text-3xl sm:text-4xl md:text-5xl font-bold text-[#414A22]">
+                ${hasDiscount ? product.discountPrice : product.price}
+              </span>
+              <div class="flex flex-col">
+                {
+                  hasDiscount && (
+                    <span class="text-base sm:text-lg text-[#414A22]/40 line-through decoration-[#BD9343]/50 decoration-2 font-medium">
+                      ${product.price}
+                    </span>
+                  )
+                }
+                <span class="text-[10px] font-bold uppercase tracking-widest text-[#414A22]/60 mt-1">
+                  /{product.category?.toLowerCase().includes("oil") ? "Ltr" : "Kg"} (Wholesale)
+                </span>
+              </div>
+            </div>
+
+            {/* Short Description */}
+            <p class="text-[#414A22]/80 text-base md:text-lg leading-relaxed mb-10 font-medium">
+              {product.shortDescription}
+            </p>
+
+            {/* Status & CTA */}
+            <div class="flex flex-col gap-4 w-full max-w-md">
+              <div class={`flex items-center gap-2 text-xs font-bold tracking-wide uppercase ${isOutOfStock ? "text-red-600" : "text-[#414A22]"}`}>
+                {
+                  isOutOfStock ? (
+                    <>
+                      <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+                      Currently Unavailable
+                    </>
+                  ) : (
+                    <>
+                      <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                      Ready for Global Export
+                    </>
+                  )
+                }
+              </div>
+
+              <a
+                href={isOutOfStock ? "#" : whatsappLink}
+                target={isOutOfStock ? "_self" : "_blank"}
+                rel="noopener noreferrer"
+                class={`w-full flex items-center justify-center gap-3 px-8 py-5 rounded-xl font-bold text-[12px] uppercase tracking-[0.15em] transition-all duration-300 shadow-md border
+                  ${isOutOfStock
+                    ? "opacity-50 cursor-not-allowed border-[#414A22]/20 text-[#414A22]/50 bg-gray-50"
+                    : "bg-[#414A22] text-white border-[#414A22] hover:bg-[#2A3015] hover:shadow-xl hover:-translate-y-1"
+                  }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+                {isOutOfStock ? "Check Restock Status" : "Request Wholesale Quote"}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* ── BOTTOM SECTION: Full Details ── */}
+        <div class="mt-16 sm:mt-24 pt-12 sm:pt-16 border-t border-[#414A22]/10 max-w-4xl mx-auto">
+          <h2 class="text-2xl md:text-3xl font-serif font-medium text-[#111] mb-10 text-center">
+            Product Specifications
+          </h2>
+
+          <div
+            class="prose prose-lg max-w-none
+            prose-headings:font-serif prose-headings:text-[#111] prose-headings:font-medium
+            prose-p:text-[#414A22]/80 prose-p:leading-relaxed
+            prose-strong:text-[#BD9343]
+            prose-li:text-[#414A22]/80 prose-ul:list-disc prose-ul:pl-5
+            custom-backend-content"
+            set:html={modifiedContent}
+          />
+        </div>
+      </div>
+    </main>
+
+    <Footer />
+
+    {/* JAVASCRIPT: Interactive Gallery swapper */}
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const mainImage = document.getElementById('main-product-image') as HTMLImageElement;
+        const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+
+        thumbnails.forEach(thumb => {
+          thumb.addEventListener('click', function(this: HTMLElement) {
+            const newSrc = this.getAttribute('data-full-src');
+            
+            if (newSrc && mainImage) {
+              // Tiny fade effect for a premium feel
+              mainImage.style.opacity = '0.5';
+              
+              setTimeout(() => {
+                mainImage.src = newSrc;
+                mainImage.style.opacity = '1';
+              }, 150);
+              
+              // Manage the active border color on the thumbnails
+              thumbnails.forEach(t => {
+                t.classList.remove('border-[#BD9343]');
+                t.classList.add('border-[#414A22]/10');
+              });
+              
+              this.classList.remove('border-[#414A22]/10');
+              this.classList.add('border-[#BD9343]');
+            }
+          });
+        });
+      });
+    </script>
+
+    <style is:global>
+      .custom-backend-content img {
+        max-width: 100% !important;
+        width: 100% !important;
+        height: auto !important;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        margin: 2rem auto;
+        display: block;
+        object-fit: cover;
+      }
+
+      .custom-backend-content p img,
+      .custom-backend-content li img {
+        width: auto !important;
+        max-width: 100% !important;
+        display: inline;
+        margin: 0;
+        border-radius: 0.25rem;
+        box-shadow: none;
+        vertical-align: middle;
+      }
+
+      .custom-backend-content iframe {
+        max-width: 100% !important;
+        width: 100% !important;
+        aspect-ratio: 16/9;
+        border-radius: 1rem;
+        margin: 2rem auto;
+        display: block;
+      }
+
+      .custom-backend-content table {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        border-collapse: collapse;
+      }
+
+      .custom-backend-content td,
+      .custom-backend-content th {
+        padding: 0.5rem 1rem;
+        border: 1px solid rgba(65, 74, 34, 0.15);
+        text-align: left;
+      }
+    </style>
+  </body>
+</html>

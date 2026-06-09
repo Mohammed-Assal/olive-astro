@@ -1,0 +1,344 @@
+---
+// src/pages/products/index.astro
+import "../../styles/global.css";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+
+// SEO Variables
+const title = "OliveExtra Boutique | Premium Moroccan Olive Oil";
+const description =
+  "Explore our premium selection of Moroccan extra virgin olive oil. Sourced directly from the Atlas groves for wholesale and export.";
+
+// 1. Fetch Products f Serveur
+let products = [];
+let categories = ["All"];
+
+try {
+  // T2kkd mn l'URL dyal l'API dyalk
+  const res = await fetch(
+    "https://back.oliveextra.com/api/product/getallproducts"
+  );
+  const data = await res.json();
+
+  products = data;
+  console.log("🚀 Products Data mn l'Backend:", products);
+  // Njbdou les catégories
+  const uniqueCats = [
+    ...new Set(products.map((p: any) => p.category).filter(Boolean)),
+  ];
+  categories = ["All", ...(uniqueCats as string[])];
+} catch (error) {
+  console.error("Error fetching products:", error);
+}
+
+// Nmrk dyal WhatsApp (Bdlha b nmrtk s7i7a, bla +)
+const whatsappNumber = "212708768573";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/webp" href="/olive-extra-logo.webp" />
+  </head>
+
+  <body class="bg-[#FCFBF8] min-h-screen flex flex-col">
+    <Header />
+
+    <main class="flex-1 pb-24 pt-24">
+      <div class="container mx-auto px-6 max-w-[1400px]">
+        {/* 1. HERO HEADER */}
+        <header
+          class="text-center max-w-3xl mx-auto mb-16 pt-10 animate-fade-in-up"
+        >
+          <div class="flex items-center justify-center gap-2 mb-4">
+            {/* Leaf SVG */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              style="color: #BD9343"
+              ><path
+                d="M11 20A7 7 0 0 1 14 6c5.5 0 8 2.5 8 2.5s-2.5 8-8 8a7 7 0 0 1-3 10Z"
+              ></path><path d="m2 22 9-9"></path></svg
+            >
+            <span
+              class="text-[#414A22] text-[10px] font-bold tracking-[0.3em] uppercase"
+              >Premium Selection</span
+            >
+          </div>
+          <h1
+            class="text-[#414A22] text-4xl md:text-6xl font-serif font-medium leading-tight mb-6"
+          >
+            The OliveExtra <br />
+            <span class="text-[#BD9343] italic font-light">Boutique</span>
+          </h1>
+          <p class="text-[#414A22] text-sm opacity-70 tracking-wide">
+            Directly sourced from the heart of Moroccan groves.
+          </p>
+        </header>
+
+        {/* 2. CATEGORY FILTERS */}
+        <nav
+          class="flex flex-wrap justify-center gap-4 mb-16"
+          id="category-filters"
+        >
+          {
+            categories.map((cat, index) => (
+              <button
+                data-category={cat}
+                class={`cat-btn px-8 py-3 rounded-full text-[11px] font-bold tracking-widest uppercase transition-all duration-500 border ${
+                  index === 0
+                    ? "bg-[#414A22] text-white border-[#414A22] shadow-xl scale-105 active-cat"
+                    : "bg-white text-[#414A22] border-black/5 hover:border-[#BD9343] hover:text-[#BD9343]"
+                }`}
+              >
+                {cat}
+              </button>
+            ))
+          }
+        </nav>
+
+        {/* 3. PRODUCT GRID */}
+        {
+          products.length === 0 ? (
+            <div class="text-center py-20 text-[#414A22]/60 font-medium">
+              No products available at the moment.
+            </div>
+          ) : (
+            <div
+              class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-12"
+              id="product-grid"
+            >
+              {products.map((product: any) => {
+                const isOutOfStock = product.stock !== "in_stock";
+                // L'message dyal WhatsApp mwjd fih smyt l'produit
+                const whatsappMessage = encodeURIComponent(
+                  `Hello OliveExtra, I am interested in wholesale pricing for: ${product.title}`
+                );
+                const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
+                return (
+                  <div
+                    data-category={product.category || "Uncategorized"}
+                    class="product-card group flex flex-col bg-white rounded-[2.5rem] overflow-hidden border border-black/5 transition-all duration-700 hover:shadow-2xl hover:shadow-[#414A22]/5 animate-fade-in-up"
+                  >
+                    {/* Image Area */}
+                    <div class="relative aspect-[4/5] overflow-hidden bg-[#FCFBF8]">
+                      <img
+                        src={product.mainImage?.url}
+                        alt={product.title}
+                        loading="lazy"
+                        class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.5s] ease-out"
+                      />
+
+                      {/* Floating Category Tag */}
+                      <div class="absolute top-6 left-6">
+                        <span class="bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest shadow-sm border border-black/5 text-[#414A22]">
+                          {product.category || "Premium"}
+                        </span>
+                      </div>
+
+                      {/* Out of Stock Overlay */}
+                      {isOutOfStock && (
+                        <div class="absolute inset-0 bg-white/60 backdrop-blur-[2px] flex items-center justify-center z-10">
+                          <span class="bg-[#414A22] text-white px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                            Restocking Soon
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content Area */}
+                    <div class="p-8 flex flex-col flex-grow">
+                      <h3 class="text-[#414A22] text-2xl font-serif font-medium mb-4 line-clamp-1 group-hover:text-[#BD9343] transition-colors">
+                        {product.title}
+                      </h3>
+
+                      {/* Tag Features */}
+                      <div class="space-y-2 mb-6">
+                        {product.tags?.[0]
+                          ?.split(",")
+                          .slice(0, 3)
+                          .map((tag: string) => (
+                            <div class="flex items-center gap-2">
+                              <div class="w-1.5 h-1.5 rounded-full bg-[#BD9343]" />
+                              <span class="text-[#414A22] text-[12px] opacity-70 uppercase tracking-wider font-medium">
+                                {tag.trim()}
+                              </span>
+                            </div>
+                          ))}
+                      </div>
+
+                      {/* Price & Action Section */}
+                      <div class="pt-6 border-t border-black/5 mt-auto">
+                        <div class="flex items-center justify-between mb-8">
+                          <div>
+                            <p class="text-[#414A22] text-[10px] uppercase tracking-widest font-bold opacity-40 mb-1">
+                              Wholesale Price
+                            </p>
+                            <div class="flex items-baseline gap-1">
+                              <span class="text-[#414A22] text-3xl font-bold tracking-tight">
+                                $
+                                {product.discountPrice ||
+                                  product.price ||
+                                  "TBD"}
+                              </span>
+                              <span class="text-[#414A22] text-[11px] opacity-60 font-bold uppercase">
+                                /
+                                {product.category?.toLowerCase().includes("oil")
+                                  ? "Ltr"
+                                  : "Kg"}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Direct WhatsApp Quote Button (Blast l'Cart) */}
+                          <a
+                            href={isOutOfStock ? "#" : whatsappLink}
+                            target={isOutOfStock ? "_self" : "_blank"}
+                            rel="noopener noreferrer"
+                            class={`p-4 rounded-full transition-all duration-500 shadow-sm border border-black/5 flex items-center justify-center
+                            ${isOutOfStock ? "opacity-50 cursor-not-allowed bg-gray-100 text-gray-400" : "bg-[#FCFBF8] text-[#414A22] hover:scale-110 hover:bg-[#25D366] hover:text-white hover:border-[#25D366]"}`}
+                            title="Request Quote via WhatsApp"
+                          >
+                            {/* WhatsApp SVG Icon */}
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                            </svg>
+                          </a>
+                        </div>
+
+                        {/* Detail Link */}
+                        <a
+                          href={`/product/${product.slug || product._id}`}
+                          class="block"
+                        >
+                          <button class="w-full py-4 rounded-full text-[11px] font-bold uppercase tracking-[0.2em] transition-all duration-500 flex items-center justify-center gap-2 group/btn shadow-md border border-[#414A22] text-[#414A22] bg-transparent hover:bg-[#414A22] hover:text-white">
+                            <span>Explore Essence</span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              class="group-hover/btn:translate-x-1 transition-transform"
+                            >
+                              <path d="M5 12h14" />
+                              <path d="m12 5 7 7-7 7" />
+                            </svg>
+                          </button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )
+        }
+      </div>
+    </main>
+
+    <Footer />
+
+    {/* JAVASCRIPT: Category Filtering Logic */}
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const buttons = document.querySelectorAll(".cat-btn");
+        const cards = document.querySelectorAll(".product-card");
+
+        buttons.forEach((button) => {
+          button.addEventListener("click", () => {
+            // Reset buttons
+            buttons.forEach((btn) => {
+              btn.classList.remove(
+                "bg-[#414A22]",
+                "text-white",
+                "shadow-xl",
+                "scale-105",
+                "active-cat",
+                "border-[#414A22]"
+              );
+              btn.classList.add("bg-white", "text-[#414A22]", "border-black/5");
+            });
+
+            // Activate clicked button
+            button.classList.remove(
+              "bg-white",
+              "text-[#414A22]",
+              "border-black/5"
+            );
+            button.classList.add(
+              "bg-[#414A22]",
+              "text-white",
+              "shadow-xl",
+              "scale-105",
+              "active-cat",
+              "border-[#414A22]"
+            );
+
+            // Filter cards
+            const selectedCategory = button.getAttribute("data-category");
+
+            cards.forEach((card) => {
+              const cardCategory = card.getAttribute("data-category");
+              if (
+                selectedCategory === "All" ||
+                cardCategory === selectedCategory
+              ) {
+                (card as HTMLElement).style.display = "flex";
+                // Animation trigger
+                (card as HTMLElement).style.opacity = "0";
+                setTimeout(() => {
+                  (card as HTMLElement).style.opacity = "1";
+                }, 50);
+              } else {
+                (card as HTMLElement).style.display = "none";
+              }
+            });
+          });
+        });
+      });
+    </script>
+
+    <style>
+      .animate-fade-in-up {
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </body>
+</html>
