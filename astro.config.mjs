@@ -5,15 +5,14 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
-
-
 import cloudflare from '@astrojs/cloudflare';
-
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://example.com',
-  integrations: [mdx(), sitemap(), ],
+  site: 'https://www.oliveextra.com', 
+  output: 'server', 
+  
+  integrations: [mdx(), sitemap()],
 
   fonts: [
       {

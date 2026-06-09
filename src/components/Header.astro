@@ -8,21 +8,12 @@ const navLinks = [
   { name: "Contact", href: "/contact" },
 ];
 import "../styles/global.css";
-// L'cart static l'had l'wa9t (ghadi nbdlouh mn b3d b Nano Stores)
-const cartItems = [
-  {
-    id: 1,
-    title: "Premium Olive Oil",
-    price: 45,
-    quantity: 2,
-    image: "/olive-extra-logo.webp",
-  }, // Bdal l'image l chi 7aja 3ndk
-];
+
 const whatsappNumber = "212708768573";
 const whatsappMessage = encodeURIComponent(
   `Hello OliveExtra, I am interested in wholesale pricing for Olive Oil`
 );
-const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+const logoImage = "/oliveextra-logo.webp";
 const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 ---
 
@@ -36,7 +27,7 @@ const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
       {/* 1. LOGO */}
       <a href="/" class="relative z-50" aria-label="Olive Extra Homepage">
         <img
-          src="../../public/olive-extra-logo.webp"
+          src={logoImage}
           alt="Olive Extra Logo"
           width="140"
           height="50"
