@@ -46,7 +46,7 @@ const processSteps = [
         <div class="inline-flex items-center gap-2 bg-[#FCFBF8]/5 px-4 py-2 rounded-full mb-8 border border-[#FCFBF8]/10">
           {/* ShieldCheck SVG */}
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#BD9343]" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-          <span class="text-[#FCFBF8] text-[10px] font-black uppercase tracking-[0.3em]">
+          <span class="text-[#FCFBF8] text-xs font-black uppercase tracking-[0.3em]">
             Quality Assurance
           </span>
         </div>
@@ -57,7 +57,7 @@ const processSteps = [
       </div>
       
       <div class="max-w-md lg:pb-2">
-        <p class="text-[#FCFBF8]/80 text-lg leading-relaxed font-light">
+        <p class="text-[#FCFBF8]/90 text-lg leading-relaxed font-light">
           Our commitment extends beyond the grove. We maintain rigorous international 
           standards to ensure every shipment delivers the authentic, uncompromised 
           taste of Morocco.
@@ -82,13 +82,13 @@ const processSteps = [
             </div>
             
             <div class="relative z-10 pt-2 lg:pt-0">
-              <h4 class="text-[#BD9343] font-black uppercase tracking-widest text-[10px] mb-3">
+              <span class="text-[#BD9343] font-black uppercase tracking-widest text-xs mb-3 block">
                 Phase {item.step}
-              </h4>
+              </span>
               <h3 class="text-[#FCFBF8] text-xl font-serif font-medium mb-4">
                 {item.title}
               </h3>
-              <p class="text-[#FCFBF8]/80 text-sm leading-relaxed font-light">
+              <p class="text-[#FCFBF8]/90 text-sm leading-relaxed font-light">
                 {item.desc}
               </p>
             </div>
@@ -119,10 +119,10 @@ const processSteps = [
               )}
 
             </div>
-            <h4 class="text-[#FCFBF8] font-bold text-sm mb-2">
+            <p class="text-[#FCFBF8] font-bold text-sm mb-2">
               {cert.title}
-            </h4>
-            <p class="text-[#FCFBF8]/80 text-[10px] font-black uppercase tracking-widest">
+            </p>
+            <p class="text-[#FCFBF8]/90 text-xs font-black uppercase tracking-widest">
               {cert.description}
             </p>
           </div>

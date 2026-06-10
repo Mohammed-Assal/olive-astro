@@ -162,8 +162,7 @@ const modifiedContent = injectBannersIntoContent(
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={imageUrl} />
-
-    <link rel="icon" type="image/webp" href="/olive-extra-logo.webp" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
     {/* JSON-LD for Google */}
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -181,7 +180,7 @@ const modifiedContent = injectBannersIntoContent(
       >
         <a href="/" class="hover:text-[#BD9343] transition-colors">Home</a>
         <span>/</span>
-        <a href="/products" class="hover:text-[#BD9343] transition-colors">Boutique</a>
+        <a href="/products" class="hover:text-[#BD9343] transition-colors">Store</a>
         <span>/</span>
         <span class="text-[#414A22]">{product.category || "Product"}</span>
       </nav>

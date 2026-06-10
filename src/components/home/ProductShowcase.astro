@@ -6,7 +6,7 @@ const products = [
     name: "Extra Virgin Olive Oil",
     grade: "Premium Grade",
     image: "https://res.cloudinary.com/dgcblyg8u/image/upload/v1771003405/jsshobc4fu4t93ffjdec.webp",
-    acidity: "< 0.8%",
+    acidity: "&lt; 0.8%",
     features: ["Cold-Pressed", "Organic Certified", "ISO 22000", "First Press"],
     price: "$7.50",
     unit: "per liter",
@@ -16,7 +16,7 @@ const products = [
     name: "Virgin Olive Oil",
     grade: "High Quality",
     image: "https://res.cloudinary.com/dgcblyg8u/image/upload/v1770929797/rs5ndbjmxhe7ox17mwdj.webp",
-    acidity: "< 2%",
+    acidity: "&lt; 2%",
     features: ["Traditional Method", "Quality Tested", "HACCP Certified", "Rich Flavor"],
     price: "$5.00",
     unit: "per liter",
@@ -26,7 +26,7 @@ const products = [
     name: "Organic Olive Oil",
     grade: "Certified Organic",
     image: "https://res.cloudinary.com/dgcblyg8u/image/upload/v1771004390/vulzxbiunlndo2f7qqxw.webp",
-    acidity: "< 0.8%",
+    acidity: "&lt; 0.8%",
     features: ["100% Organic", "EU Certified", "Sustainable", "Premium Quality"],
     price: "$9.90",
     unit: "per liter",
@@ -42,7 +42,7 @@ const products = [
       <div class="inline-flex items-center gap-2 bg-[#414A22]/10 px-4 py-2 rounded-full mb-6">
         {/* Leaf Icon SVG */}
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#8A6A27]" aria-hidden="true"><path d="M11 20A7 7 0 0 1 14 6c5.5 0 8 2.5 8 2.5s-2.5 8-8 8a7 7 0 0 1-3 10Z"/><path d="m2 22 9-9"/></svg>
-        <span class="text-[#414A22] text-[10px] font-black uppercase tracking-[0.3em]">
+        <span class="text-[#414A22] text-[10px] md:text-xs font-black uppercase tracking-[0.3em]">
           The Collection
         </span>
       </div>
@@ -78,18 +78,9 @@ const products = [
 
             {/* Grade Badge */}
             <div class="absolute top-6 left-6">
-              <span class="bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest text-[#414A22] shadow-sm border border-[#414A22]/10">
+              <span class="bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest text-[#414A22] shadow-sm border border-[#414A22]/10">
                 {product.grade}
               </span>
-            </div>
-
-            <div class="absolute bottom-6 left-6 bg-white/95 backdrop-blur-md px-5 py-2.5 rounded-2xl shadow-sm">
-              <p class="text-[#414A22]/80 text-[9px] font-black uppercase tracking-widest mb-0.5">
-                Acidity
-              </p>
-              <p class="text-[#414A22] text-lg font-bold tracking-tight leading-none">
-                {product.acidity}
-              </p>
             </div>
           </div>
 
@@ -118,20 +109,20 @@ const products = [
             <div class="pt-8 border-t border-[#414A22]/10 mt-auto">
               <div class="flex items-end justify-between mb-8">
                 <div class="space-y-1">
-                  <p class="text-[#414A22]/70 text-[9px] font-black uppercase tracking-widest">
+                  <p class="text-[#414A22]/90 text-[10px] font-black uppercase tracking-widest">
                     Wholesale
                   </p>
                   <div class="flex items-baseline gap-1">
                     <span class="text-[#414A22] text-3xl font-bold tracking-tighter">
                       {product.price}
                     </span>
-                    <span class="text-[#414A22]/80 text-[10px] font-bold uppercase">
+                    <span class="text-[#414A22]/90 text-[10px] font-bold uppercase">
                       {product.unit}
                     </span>
                   </div>
                 </div>
                 <div class="text-right space-y-1">
-                  <p class="text-[#414A22]/70 text-[9px] font-black uppercase tracking-widest">
+                  <p class="text-[#414A22]/90 text-[10px] font-black uppercase tracking-widest">
                     Min. Vol
                   </p>
                   <p class="text-[#414A22] text-lg font-bold">
@@ -143,7 +134,7 @@ const products = [
               <a 
                 href="/product" 
                 aria-label={`View full specifications for ${product.name}`}
-                class="w-full py-4 rounded-full border-2 border-[#414A22] text-[#414A22] text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 hover:bg-[#414A22] hover:text-white flex items-center justify-center gap-2 group/btn shadow-md active:scale-95"
+                class="w-full py-4 rounded-full border-2 border-[#414A22] text-[#414A22] text-xs font-black uppercase tracking-[0.2em] transition-all duration-500 hover:bg-[#414A22] hover:text-white flex items-center justify-center gap-2 group/btn shadow-md active:scale-95"
               >
                 See Grade Details
                 {/* ArrowRight Icon SVG */}

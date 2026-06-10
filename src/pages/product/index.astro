@@ -21,7 +21,7 @@ try {
   const data = await res.json();
 
   products = data;
-  console.log("🚀 Products Data mn l'Backend:", products);
+
   // Njbdou les catégories
   const uniqueCats = [
     ...new Set(products.map((p: any) => p.category).filter(Boolean)),
@@ -42,7 +42,7 @@ const whatsappNumber = "212708768573";
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="icon" type="image/webp" href="/olive-extra-logo.webp" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   </head>
 
   <body class="bg-[#FCFBF8] min-h-screen flex flex-col">
